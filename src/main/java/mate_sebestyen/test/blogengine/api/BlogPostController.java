@@ -1,6 +1,7 @@
 package mate_sebestyen.test.blogengine.api;
 
 import mate_sebestyen.test.blogengine.data.*;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,6 +34,12 @@ public class BlogPostController {
 
     @PostMapping
     public BlogPost createBlogPost(@RequestBody BlogPostCreate newBlogPost) {
+        if (Strings.isBlank(newBlogPost.title)) {
+            throw new InvalidFieldsException("title");
+        }
+        if (Strings.isBlank(newBlogPost.content)) {
+            throw new InvalidFieldsException("content");
+        }
         BlogPost blogPost = new BlogPost(newBlogPost.title, newBlogPost.content);
 
         if (newBlogPost.tagIds != null && !newBlogPost.tagIds.isEmpty()) {
