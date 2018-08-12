@@ -24,7 +24,7 @@ public class Tag {
 
     public void setName(String name) throws TagNameException {
         if (name.length() < 3 || name.length() > 10)
-            throw new TagNameException("Tag name must be between 3 and 10 characters");
+            throw new TagNameException();
         this.name = name;
     }
 
@@ -37,8 +37,8 @@ public class Tag {
     }
 
     private class TagNameException extends Throwable {
-        TagNameException(String s) {
-            super(s);
+        TagNameException() {
+            super("Tag name must be between 3 and 10 characters");
         }
     }
 }
