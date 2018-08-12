@@ -44,7 +44,7 @@ public class Tag {
         this.category = category;
     }
 
-    private class TagNameException extends Throwable {
+    public class TagNameException extends Throwable {
         TagNameException() {
             super("Tag name must be between 3 and 10 characters");
         }
