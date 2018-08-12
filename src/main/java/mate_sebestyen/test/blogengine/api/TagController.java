@@ -36,7 +36,10 @@ public class TagController {
             throw new InvalidFieldException("categoryId");
         }
         Category category = categoryRepository.findById(newTag.categoryId).orElseThrow(() -> new NotFoundException("Category", newTag.categoryId));
-        return tagRepository.save(new Tag(newTag.name, category));
+        Tag tag = tagRepository.save(new Tag(newTag.name, category));
+        category.addTag(tag);
+        categoryRepository.save(category);
+        return tag;
     }
 
     @GetMapping("/{id}")
@@ -51,8 +54,10 @@ public class TagController {
             tag.setName(tagUpdate.name);
         }
         if (tagUpdate.categoryId != null) {
+            categoryRepository.findById(tag.getCategory().getId()).ifPresent(category -> category.removeTag(tag));
             Category category = categoryRepository.findById(tagUpdate.categoryId).orElseThrow(() -> new NotFoundException("Category", tagUpdate.categoryId));
             tag.setCategory(category);
+            category.addTag(tag);
         }
         return tagRepository.save(tag);
     }
