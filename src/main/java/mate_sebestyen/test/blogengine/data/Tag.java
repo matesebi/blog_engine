@@ -1,5 +1,8 @@
 package mate_sebestyen.test.blogengine.data;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import mate_sebestyen.test.blogengine.data.converter.CategoryConverter;
+
 import javax.persistence.*;
 
 @Entity
@@ -11,6 +14,8 @@ public class Tag {
 
     private String name;
 
+
+    @JsonSerialize(converter = CategoryConverter.class)
     @OneToOne
     private Category category;
 

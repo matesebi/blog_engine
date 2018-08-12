@@ -1,6 +1,8 @@
 package mate_sebestyen.test.blogengine.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import mate_sebestyen.test.blogengine.data.converter.TagSetConverter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -21,7 +23,8 @@ public class BlogPost {
     @Lob
     private String content;
 
-    @OneToMany
+    @JsonSerialize(converter = TagSetConverter.class)
+    @ManyToMany
     private Set<Tag> tags;
 
     @CreationTimestamp

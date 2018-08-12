@@ -1,5 +1,8 @@
 package mate_sebestyen.test.blogengine.data;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import mate_sebestyen.test.blogengine.data.converter.TagSetConverter;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -12,8 +15,16 @@ public class Category {
 
     private String name;
 
-    @OneToMany
+    @JsonSerialize(converter = TagSetConverter.class)
+    @OneToMany(cascade = CascadeType.REMOVE)
     private Set<Tag> tags;
+
+    private Category() {
+    }
+
+    public Category(String name) {
+        this.name = name;
+    }
 
     public Long getId() {
         return id;
@@ -33,5 +44,13 @@ public class Category {
 
     public void setTags(Set<Tag> tags) {
         this.tags = tags;
+    }
+
+    public void addTag(Tag tag) {
+        this.tags.add(tag);
+    }
+
+    public void removeTag(Tag tag) {
+        this.tags.remove(tag);
     }
 }
