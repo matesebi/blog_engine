@@ -6,6 +6,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(HttpStatus.NOT_FOUND)
 class BlogPostNotFoundException extends RuntimeException {
     BlogPostNotFoundException(Long id) {
-        super("Blog post with id: " + id + " not found");
+        super("Blog post with id: '" + id + "' not found");
     }
 }

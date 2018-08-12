@@ -6,6 +6,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(HttpStatus.NOT_FOUND)
 class TagNotFoundException extends RuntimeException {
     TagNotFoundException(Long id) {
-        super("Blog post with id: " + id + " not found");
+        super("Blog post with id: '" + id + "' not found");
     }
 }
