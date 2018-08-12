@@ -14,6 +14,14 @@ public class Tag {
     @OneToOne
     private Category category;
 
+    private Tag() {
+    }
+
+    public Tag(String name, Category category) {
+        this.name = name;
+        this.category = category;
+    }
+
     public Long getId() {
         return id;
     }
