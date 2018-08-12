@@ -24,9 +24,6 @@ public class BlogPostController {
         this.tagRepository = tagRepository;
     }
 
-    @Autowired
-
-
     @GetMapping
     public Collection<BlogPost> getBlogPosts() {
         return blogPostRepository.findAll();
@@ -35,10 +32,10 @@ public class BlogPostController {
     @PostMapping
     public BlogPost createBlogPost(@RequestBody BlogPostCreate newBlogPost) {
         if (Strings.isBlank(newBlogPost.title)) {
-            throw new InvalidFieldsException("title");
+            throw new InvalidFieldException("title");
         }
         if (Strings.isBlank(newBlogPost.content)) {
-            throw new InvalidFieldsException("content");
+            throw new InvalidFieldException("content");
         }
         BlogPost blogPost = new BlogPost(newBlogPost.title, newBlogPost.content);
 
@@ -52,12 +49,12 @@ public class BlogPostController {
 
     @GetMapping("/{id}")
     public BlogPost getBlogPost(@PathVariable Long id) {
-        return blogPostRepository.findById(id).orElseThrow(() -> new BlogPostNotFoundException(id));
+        return blogPostRepository.findById(id).orElseThrow(() -> new NotFoundException("Blog post", id));
     }
 
     @PutMapping("/{id}")
     public BlogPost updateBlogPost(@PathVariable Long id, @RequestBody BlogPostUpdate blogPostUpdate) {
-        BlogPost blogPost = blogPostRepository.findById(id).orElseThrow(() -> new BlogPostNotFoundException(id));
+        BlogPost blogPost = blogPostRepository.findById(id).orElseThrow(() -> new NotFoundException("Blog post", id));
         if (blogPostUpdate.title != null) {
             blogPost.setTitle(blogPostUpdate.title);
         }
@@ -80,20 +77,20 @@ public class BlogPostController {
 
     @DeleteMapping("/{id}")
     public EmptyResponse deleteBlogPost(@PathVariable Long id) {
-        BlogPost blogPost = blogPostRepository.findById(id).orElseThrow(() -> new BlogPostNotFoundException(id));
+        BlogPost blogPost = blogPostRepository.findById(id).orElseThrow(() -> new NotFoundException("Blog post", id));
         blogPostRepository.delete(blogPost);
         return new EmptyResponse();
     }
 
     @GetMapping("/{id}/tags")
     public Collection<Tag> getTagsForBlogPost(@PathVariable("id") long id) {
-        BlogPost blogPost = blogPostRepository.findById(id).orElseThrow(() -> new BlogPostNotFoundException(id));
+        BlogPost blogPost = blogPostRepository.findById(id).orElseThrow(() -> new NotFoundException("Blog post", id));
         return blogPost.getTags();
     }
 
     @GetMapping("/bytag/{tagId}")
     public Collection<BlogPost> getBlogPostsByTag(@PathVariable("tagId") long tagId) {
-        Tag tag = tagRepository.findById(tagId).orElseThrow(() -> new TagNotFoundException(tagId));
+        Tag tag = tagRepository.findById(tagId).orElseThrow(() -> new NotFoundException("Tag", tagId));
         return blogPostRepository.findByTagsIsContaining(tag);
     }
 }
