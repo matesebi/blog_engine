@@ -3,6 +3,7 @@ package mate_sebestyen.test.blogengine.api;
 import mate_sebestyen.test.blogengine.data.*;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -76,10 +77,10 @@ public class BlogPostController {
     }
 
     @DeleteMapping("/{id}")
-    public EmptyResponse deleteBlogPost(@PathVariable Long id) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteBlogPost(@PathVariable Long id) {
         BlogPost blogPost = blogPostRepository.findById(id).orElseThrow(() -> new NotFoundException("Blog post", id));
         blogPostRepository.delete(blogPost);
-        return new EmptyResponse();
     }
 
     @GetMapping("/{id}/tags")
