@@ -43,12 +43,6 @@ public class BlogPost {
         this.content = content;
     }
 
-    public BlogPost(String title, String content, Set<Tag> tags) {
-        this.title = title;
-        this.content = content;
-        this.tags = tags;
-    }
-
     public Long getId() {
         return id;
     }
@@ -83,15 +77,5 @@ public class BlogPost {
 
     public Date getLastModified() {
         return lastModified;
-    }
-
-    @Override
-    public String toString() {
-        return "BlogPost{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", content='" + content + '\'' +
-                ", tags=" + tags +
-                '}';
     }
 }

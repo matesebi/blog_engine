@@ -9,13 +9,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/blogposts")
 public class BlogPostController {
 
-    Logger logger = Logger.getLogger(BlogPost.class.getName());
     private final BlogPostRepository blogPostRepository;
     private final TagRepository tagRepository;
 

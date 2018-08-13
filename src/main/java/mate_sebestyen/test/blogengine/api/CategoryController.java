@@ -7,8 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/categories", produces = "application/json")
@@ -51,7 +49,6 @@ public class CategoryController {
             categoryUpdate.newTagIds.forEach(tagId -> tagRepository.findById(tagId).ifPresent(category::addTag));
         }
         if (categoryUpdate.deleteTagIds != null && !categoryUpdate.deleteTagIds.isEmpty()) {
-            Set<Tag> tags = new HashSet<>();
             categoryUpdate.deleteTagIds.forEach(tagId -> tagRepository.findById(tagId).ifPresent(category::removeTag));
         }
         return categoryRepository.save(category);
