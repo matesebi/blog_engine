@@ -8,6 +8,8 @@ import mate_sebestyen.test.blogengine.model.BlogPost;
 import mate_sebestyen.test.blogengine.model.Tag;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -92,9 +94,9 @@ public class BlogPostController {
         return blogPost.getTags();
     }
 
-    @GetMapping("/bytag/{tagId}")
-    public Collection<BlogPost> getBlogPostsByTag(@PathVariable("tagId") long tagId) {
+    @GetMapping(value = "/bytag/{tagId}")
+    public Page<BlogPost> getBlogPostsByTag(@PathVariable("tagId") long tagId, @RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "size", defaultValue = "10") int size) {
         Tag tag = tagRepository.findById(tagId).orElseThrow(() -> new NotFoundException("Tag", tagId));
-        return blogPostRepository.findByTagsIsContaining(tag);
+        return blogPostRepository.findAllByTagsContaining(tag, PageRequest.of(page, size));
     }
 }
