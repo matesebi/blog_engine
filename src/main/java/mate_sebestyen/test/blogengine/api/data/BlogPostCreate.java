@@ -1,4 +1,4 @@
-package mate_sebestyen.test.blogengine.data;
+package mate_sebestyen.test.blogengine.api.data;
 
 import java.util.List;
 

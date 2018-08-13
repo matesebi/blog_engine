@@ -1,6 +1,11 @@
 package mate_sebestyen.test.blogengine.api;
 
-import mate_sebestyen.test.blogengine.data.*;
+import mate_sebestyen.test.blogengine.api.data.BlogPostCreate;
+import mate_sebestyen.test.blogengine.api.data.BlogPostUpdate;
+import mate_sebestyen.test.blogengine.dal.BlogPostRepository;
+import mate_sebestyen.test.blogengine.dal.TagRepository;
+import mate_sebestyen.test.blogengine.model.BlogPost;
+import mate_sebestyen.test.blogengine.model.Tag;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

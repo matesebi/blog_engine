@@ -1,7 +1,7 @@
-package mate_sebestyen.test.blogengine.data;
+package mate_sebestyen.test.blogengine.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import mate_sebestyen.test.blogengine.data.converter.CategoryConverter;
+import mate_sebestyen.test.blogengine.api.data.converter.CategoryConverter;
 
 import javax.persistence.*;
 

@@ -1,9 +1,9 @@
-package mate_sebestyen.test.blogengine.data.converter;
+package mate_sebestyen.test.blogengine.api.data.converter;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.databind.util.Converter;
-import mate_sebestyen.test.blogengine.data.Category;
+import mate_sebestyen.test.blogengine.model.Category;
 
 public class CategoryConverter implements Converter<Category, Long> {
 
