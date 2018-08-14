@@ -8,6 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -41,6 +42,7 @@ public class BlogPost {
     public BlogPost(String title, String content) {
         this.title = title;
         this.content = content;
+        this.tags = new HashSet<>();
     }
 
     public Long getId() {
