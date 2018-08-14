@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import mate_sebestyen.test.blogengine.api.data.converter.TagSetConverter;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -24,6 +25,7 @@ public class Category {
 
     public Category(String name) {
         this.name = name;
+        this.tags = new HashSet<>();
     }
 
     public Long getId() {
