@@ -35,7 +35,7 @@ public class BlogPost {
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastModified;
 
-    public BlogPost() {
+    private BlogPost() {
     }
 
     public BlogPost(String title, String content) {
