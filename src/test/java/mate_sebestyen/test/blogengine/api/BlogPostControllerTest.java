@@ -28,7 +28,6 @@ import java.util.Optional;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -49,7 +48,7 @@ public class BlogPostControllerTest {
 
     @Test
     public void getBlogPosts_EmptyRepository() throws Exception {
-        given(blogPostRepository.findAll()).willReturn(new ArrayList<>());
+        when(blogPostRepository.findAll()).thenReturn(new ArrayList<>());
 
         mvc.perform(
                 get("/blogposts")
@@ -61,13 +60,12 @@ public class BlogPostControllerTest {
 
     @Test
     public void getBlogPosts_3Entries() throws Exception {
-
         List<BlogPost> blogPosts = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
             blogPosts.add(new BlogPost("BlogPost" + i, "content"));
         }
 
-        given(blogPostRepository.findAll()).willReturn(blogPosts);
+        when(blogPostRepository.findAll()).thenReturn(blogPosts);
 
         ResultActions resultActions = mvc.perform(
                 get("/blogposts")
@@ -77,41 +75,43 @@ public class BlogPostControllerTest {
                 .andExpect(jsonPath("$", hasSize(3)));
 
         for (int i = 0; i < 3; i++) {
-            resultActions.andExpect(jsonPath("$[" + i + "].title", is("BlogPost" + i)));
-            resultActions.andExpect(jsonPath("$[" + i + "].content", is("content")));
+            resultActions.andExpect(jsonPath("$[" + i + "].title", is("BlogPost" + i)))
+                    .andExpect(jsonPath("$[" + i + "].content", is("content")));
         }
     }
 
     @Test
     public void createBlogPost() throws Exception {
         BlogPost blogPost = new BlogPost("Blog Post", "content");
+        when(blogPostRepository.save(ArgumentMatchers.any())).thenReturn(blogPost);
+
         BlogPostCreate blogPostCreate = new BlogPostCreate();
         blogPostCreate.title = "Blog Post";
         blogPostCreate.content = "content";
-
-        when(blogPostRepository.save(ArgumentMatchers.any())).thenReturn(blogPost);
         ObjectMapper mapper = new ObjectMapper();
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         String content = mapper.writeValueAsString(blogPostCreate);
+
         ResultActions resultActions = mvc.perform(
                 post("/blogposts")
                         .content(content)
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
-        );
-        resultActions.andExpect(jsonPath("$.title", is("Blog Post")));
-        resultActions.andExpect(jsonPath("$.content", is("content")));
+        )
+                .andExpect(jsonPath("$.title", is("Blog Post")))
+                .andExpect(jsonPath("$.content", is("content")));
     }
 
     @Test
     public void createBlogPostNoTitle() throws Exception {
         BlogPost blogPost = new BlogPost("Blog Post", "content");
+        when(blogPostRepository.save(ArgumentMatchers.any())).thenReturn(blogPost);
+
         BlogPostCreate blogPostCreate = new BlogPostCreate();
         blogPostCreate.content = "content";
-
-        when(blogPostRepository.save(ArgumentMatchers.any())).thenReturn(blogPost);
         ObjectMapper mapper = new ObjectMapper();
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         String content = mapper.writeValueAsString(blogPostCreate);
+
         ResultActions resultActions = mvc.perform(
                 post("/blogposts")
                         .content(content)
@@ -144,13 +144,14 @@ public class BlogPostControllerTest {
 
     @Test
     public void putNotExisting() throws Exception {
+        when(blogPostRepository.findById(ArgumentMatchers.any())).thenReturn(Optional.empty());
+
         BlogPostUpdate update = new BlogPostUpdate();
-        update.title = "new Title";
+        update.title = "new_Title";
         ObjectMapper mapper = new ObjectMapper();
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         String content = mapper.writeValueAsString(update);
 
-        when(blogPostRepository.findById(ArgumentMatchers.any())).thenReturn(Optional.empty());
         ResultActions resultActions = mvc.perform(
                 put("/blogposts/1")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -161,15 +162,15 @@ public class BlogPostControllerTest {
 
     @Test
     public void putExisting() throws Exception {
+        BlogPost blogPost = new BlogPost("Blogpost", "content");
+        when(blogPostRepository.findById((long) 1)).thenReturn(Optional.of(blogPost));
+        when(blogPostRepository.save(blogPost)).thenReturn(blogPost);
+
         BlogPostUpdate update = new BlogPostUpdate();
         update.title = "new Title";
         ObjectMapper mapper = new ObjectMapper();
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         String content = mapper.writeValueAsString(update);
-
-        BlogPost blogPost = new BlogPost("Blogpost", "content");
-        when(blogPostRepository.findById((long) 1)).thenReturn(Optional.of(blogPost));
-        when(blogPostRepository.save(blogPost)).thenReturn(blogPost);
 
         ResultActions resultActions = mvc.perform(
                 put("/blogposts/1")
